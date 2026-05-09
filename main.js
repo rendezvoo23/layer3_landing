@@ -22,6 +22,7 @@ const hubs = [
     href: '/nicaragua',
     externalUrl: 'https://layer3.news/posts/subjects/nicaragua',
     flag: '/flags/ni.png',
+    heroImage: '/hubs/nicaragua_footage.webp',
     lat: 12.865,
     lng: -85.207,
     match: feat => feat.properties.ISO_A2 === 'NI' || feat.properties.NAME === 'Nicaragua'
@@ -34,6 +35,7 @@ const hubs = [
     href: '/venezuela',
     externalUrl: 'https://layer3.news/posts/subjects/venezuela',
     flag: '/flags/ve.png',
+    heroImage: '/hubs/venezuela_footage.jpg',
     lat: 6.423,
     lng: -66.589,
     match: feat => feat.properties.ISO_A2 === 'VE' || feat.properties.NAME === 'Venezuela'
@@ -46,6 +48,7 @@ const hubs = [
     href: '/europe',
     externalUrl: 'https://layer3.news/posts/subjects/europe',
     flag: '/flags/eu.png',
+    heroImage: '/hubs/europe_footage.jpg',
     lat: 51.165,
     lng: 10.451,
     match: feat => feat.properties.CONTINENT === 'Europe' && feat.properties.NAME !== 'Russia'
@@ -58,6 +61,7 @@ const hubs = [
     href: '/united-states',
     externalUrl: 'https://layer3.news/posts/subjects/u.s.',
     flag: '/flags/us.png',
+    heroImage: '/hubs/usa_footage.webp',
     lat: 39.828,
     lng: -98.579,
     match: feat => feat.properties.ISO_A2 === 'US' || feat.properties.ISO_A3 === 'USA' || feat.properties.NAME === 'United States of America'
@@ -78,6 +82,11 @@ const initGlobe = () => {
 
   let activeHub = null;
   const findHubByFeature = feat => hubs.find(hub => hub.match(feat));
+  const findHubBySlug = slug => hubs.find(hub => {
+    const normalizedSlug = slug.replace(/^\//, '').toLowerCase();
+    return hub.href.replace(/^\//, '').toLowerCase() === normalizedSlug ||
+      hub.title.toLowerCase().replace(/\s+/g, '-') === normalizedSlug;
+  });
 
   const globe = Globe()(container)
     .width(container.clientWidth)
@@ -176,7 +185,7 @@ const initGlobe = () => {
     panel.setAttribute('aria-hidden', 'false');
   };
 
-  const initialPosition = { lat: 18, lng: -45, altitude: 1.85 };
+  const initialPosition = { lat: 18, lng: -45, altitude: 1.75 };
 
   const clearHub = () => {
     if (!activeHub) return;
@@ -207,7 +216,7 @@ const initGlobe = () => {
       .polygonStrokeColor(globe.polygonStrokeColor());
 
     // Zoom and stop rotation
-    globe.pointOfView({ lat: hub.lat, lng: hub.lng, altitude: 1.2 }, 1000);
+    globe.pointOfView({ lat: hub.lat, lng: hub.lng, altitude: 1.38 }, 1000);
     globe.controls().autoRotate = false;
 
     updateSidebar();
@@ -242,6 +251,14 @@ const initGlobe = () => {
   // Set initial position
   globe.pointOfView(initialPosition);
   updatePanel();
+
+  const requestedHub = new URLSearchParams(window.location.search).get('hub');
+  if (requestedHub) {
+    const hub = findHubBySlug(requestedHub);
+    if (hub) {
+      toggleHub(hub);
+    }
+  }
 
   // Handle resize
   const resizeGlobe = () => {
