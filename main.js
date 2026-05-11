@@ -91,23 +91,23 @@ const initGlobe = () => {
   const globe = Globe()(container)
     .width(container.clientWidth)
     .height(container.clientHeight)
-    .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-night.jpg') // Dark realistic night look
+    .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
     .backgroundColor('rgba(0,0,0,0)')
     // Core points
     .pointsData(hubs)
     .pointLat('lat')
     .pointLng('lng')
-    .pointColor(() => '#0072FC')
-    .pointAltitude(0.01)
-    .pointRadius(1.05)
+    .pointColor(() => '#007AFF')
+    .pointAltitude(0.018)
+    .pointRadius(1.18)
     .pointResolution(18)
     .pointsMerge(false)
     // Pulsing rings
     .ringsData(hubs)
     .ringLat('lat')
     .ringLng('lng')
-    .ringColor(() => '#0072FC')
-    .ringMaxRadius(3)
+    .ringColor(() => 'rgba(0, 122, 255, 0.78)')
+    .ringMaxRadius(3.8)
     .ringPropagationSpeed(1)
     .ringRepeatPeriod(1000)
     // 3D labels for proper occlusion behind the globe
@@ -116,8 +116,8 @@ const initGlobe = () => {
     .labelLng('lng')
     .labelText('title')
     .labelSize(1.35)
-    .labelDotRadius(0.3)
-    .labelColor(() => 'rgba(255, 255, 255, 0.9)')
+    .labelDotRadius(0.36)
+    .labelColor(() => 'rgba(255, 255, 255, 0.96)')
     .labelResolution(2)
     .labelAltitude(0.02)
     .onLabelClick(d => toggleHub(d))
@@ -132,16 +132,16 @@ const initGlobe = () => {
         .polygonAltitude(0.005)
         .polygonCapColor(feat => {
           if (activeHub && activeHub.match(feat)) {
-            return 'rgba(0, 114, 252, 0.6)'; // Highlight color
+            return 'rgba(0, 122, 255, 0.72)'; // Highlight color
           }
-          return 'rgba(255, 255, 255, 0.02)'; // Very subtle default land color
+          return 'rgba(255, 255, 255, 0.08)'; // Very subtle default land color
         })
         .polygonSideColor(() => 'rgba(0, 0, 0, 0)')
         .polygonStrokeColor(feat => {
           if (activeHub && activeHub.match(feat)) {
-            return '#0072FC'; // Border highlight
+            return '#0057D9'; // Border highlight
           }
-          return 'rgba(255, 255, 255, 0.05)'; // Default subtle country border
+          return 'rgba(20, 28, 42, 0.12)'; // Default subtle country border
         })
         .polygonsTransitionDuration(300)
         .onPolygonClick(feat => {
@@ -241,7 +241,7 @@ const initGlobe = () => {
   }
 
   // Custom atmosphere
-  globe.atmosphereColor('#0072FC').atmosphereAltitude(0.15);
+  globe.atmosphereColor('#8EC5FF').atmosphereAltitude(0.18);
 
   // Auto-rotate
   globe.controls().autoRotate = true;
